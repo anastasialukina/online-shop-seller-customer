@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use Closure;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -32,7 +33,17 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'address' => ['string', 'max:255'],
+            'phone' => ['string', 'unique:users,phone', 'max:255'],
+            'role' => [
+                'required', 'string', 'max:255',
+                function (string $attribute, mixed $value, Closure $fail) {
+                    if ($value != 'customer' && $value != 'seller') {
+                        $fail("The {$attribute} is invalid.");
+                    }
+                },
+            ],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
@@ -40,6 +51,9 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'role' => $request->role,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'status' => 'active',
             'password' => Hash::make($request->password),
         ]);
 
