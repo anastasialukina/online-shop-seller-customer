@@ -16,10 +16,10 @@ class CheckRole
      */
     public function handle(Request $request, Closure $next, string $role)
     {
-        if ($role == 'customer' && auth()->user()->role != 'customer') {
+        if ($role == 'customer' && auth()->user()->role->value != 'customer') {
             abort(403);
         }
-        if ($role == 'seller' && auth()->user()->role != 'seller') {
+        if ($role == 'seller' && auth()->user()->role->value != 'seller') {
             abort(403);
         }
 

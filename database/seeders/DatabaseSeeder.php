@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
             //comment the seeder if your db is already seeded
             //UserSeeder::class,
             //ProductSeeder::class,
+
+            //many to many seeder for users and products
+            //works only if you have already seeded users and products
+            //UsersProductsSeeder::class,
         ]);
     }
 }

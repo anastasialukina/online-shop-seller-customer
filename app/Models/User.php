@@ -49,4 +49,13 @@ class User extends Authenticatable
         'role' => UserRoleEnum::class,
     ];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function products()
+    {
+        return $this->hasMany(UsersProduct::class, 'user_id', 'user_id');
+    }
 }

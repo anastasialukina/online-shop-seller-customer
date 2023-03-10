@@ -9,11 +9,12 @@ class RedirectAuthenticatedUsersController extends Controller
 {
     public function home()
     {
-        if (auth()->user()->role == 'customer') {
+        if (auth()->user()->role->value == 'customer') {
             return redirect('/products');
-        } elseif (auth()->user()->role == 'seller') {
+        } elseif (auth()->user()->role->value == 'seller') {
             return redirect('/orders');
         } else {
+            dd(auth()->user()->role->value);
             return auth()->logout();
         }
     }
