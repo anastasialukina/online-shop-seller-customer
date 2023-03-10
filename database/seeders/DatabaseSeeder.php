@@ -15,7 +15,10 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
-            UserSeeder::class,
+            //uncomment the seeder you want to run and don't forget to run php artisan db:seed
+            //comment the seeder if your db is already seeded
+            //UserSeeder::class,
+            //ProductSeeder::class,
         ]);
     }
 }
