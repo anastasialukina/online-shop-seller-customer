@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Product;
+use App\Models\UsersProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -33,6 +35,7 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
+        //dd($request->all());
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'description' => 'required',
@@ -56,11 +59,22 @@ class ProductController extends Controller
         $product->save();
 
         //$product->users()->attach(auth()->user()->id);
-        DB::table('users_products')->insert([
+        UsersProduct::query()->create([
             'user_id' => auth()->user()->id,
             'product_id' => $product->id,
             'type' => $request->input('type'),
         ]);
+
+        $orders = Order::all();
+        foreach ($orders as $order) {
+            if ($order->product_name == $product->name) {
+                if ($order->min_price <= $product->price && $order->max_price >= $product->price) {
+                    $order->product_id = $product->id;
+                    $order->save();
+                }
+            }
+        }
         return redirect('/products');
+
     }
 }

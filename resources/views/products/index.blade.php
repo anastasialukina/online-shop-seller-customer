@@ -1,6 +1,13 @@
-<button type="button" class="btn btn-primary">
-    <a href="{{ route('orders.create') }}">Create Order</a>
-</button>
+@if (auth()->user()->role->value == 'customer')
+    <button type="button" class="btn btn-primary">
+        <a href="{{ route('orders.create') }}">Create Order</a>
+    </button>
+@endif
+@if (auth()->user()->role->value == 'seller')
+    <button type="button" class="btn btn-primary">
+        <a href="{{ route('products.create') }}">Create Product</a>
+    </button>
+@endif
 @foreach ($products as $product)
     <div class="product">
         <h2>{{ $product->name }}</h2>
